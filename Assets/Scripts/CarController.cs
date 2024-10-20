@@ -2,41 +2,70 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    public float laneDistance = 4.0f;  // Расстояние между полосами
-    public float moveSpeed = 10.0f;    // Скорость движения вбок
-    private int currentLane = 1;        // Текущая полоса (0 = влево, 1 = центр, 2 = вправо)
+    public float moveSpeed = 10.0f;
+    public float laneSwitchSpeed = 5.0f;
+    public GameObject player;
+    public Transform playerExitPoint;
+    public Transform playerEnterPoint;
+
+    private bool isPlayerInCar = true;
+    private bool isPlayerNearCar = false;
+
+    // Ссылка на RoadManager для управления движением дороги
+    public RoadManager roadManager;
 
     void Update()
     {
-        // Обработка ввода
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && currentLane > 0)
+        if (isPlayerInCar)
         {
-            currentLane--;
-            MoveToLane();
+            HandleCarMovement();
+            if (Input.GetKeyDown(KeyCode.E)) ExitCar();
         }
-        else if (Input.GetKeyDown(KeyCode.RightArrow) && currentLane < 2)
+        else if (isPlayerNearCar && Input.GetKeyDown(KeyCode.E))
         {
-            currentLane++;
-            MoveToLane();
+            EnterCar();
         }
     }
 
-    void MoveToLane()
+    void HandleCarMovement()
     {
-        // Целевая позиция по X в зависимости от текущей полосы
-        Vector3 targetPosition = new Vector3(currentLane * laneDistance - laneDistance, transform.position.y, transform.position.z);
-
-        // Плавное перемещение в нужное место
-        StopAllCoroutines();
-        StartCoroutine(MoveToPosition(targetPosition));
+        float moveX = Input.GetAxis("Horizontal") * laneSwitchSpeed * Time.deltaTime;
+        transform.Translate(new Vector3(moveX, 0, 0));
     }
 
-    System.Collections.IEnumerator MoveToPosition(Vector3 target)
+    void ExitCar()
     {
-        while (Vector3.Distance(transform.position, target) > 0.01f)
+        isPlayerInCar = false;
+        player.transform.position = playerExitPoint.position;
+        player.SetActive(true);
+
+        // Остановка движения дороги
+        roadManager.StopRoad();
+    }
+
+    void EnterCar()
+    {
+        isPlayerInCar = true;
+        player.SetActive(false);
+        player.transform.position = playerEnterPoint.position;
+
+        // Возобновление движения дороги
+        roadManager.StartRoad();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject == player)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target, moveSpeed * Time.deltaTime);
-            yield return null;
+            isPlayerNearCar = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject == player)
+        {
+            isPlayerNearCar = false;
         }
     }
 }
