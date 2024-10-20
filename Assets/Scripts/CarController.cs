@@ -11,8 +11,8 @@ public class CarController : MonoBehaviour
     private bool isPlayerInCar = true;
     private bool isPlayerNearCar = false;
 
-    // Ссылка на RoadManager для управления движением дороги
-    public RoadManager roadManager;
+    // Ссылка на RoadController для управления движением дороги
+    public RoadController roadController;
 
     void Update()
     {
@@ -40,7 +40,7 @@ public class CarController : MonoBehaviour
         player.SetActive(true);
 
         // Остановка движения дороги
-        roadManager.StopRoad();
+        roadController.StopRoad();
     }
 
     void EnterCar()
@@ -50,7 +50,7 @@ public class CarController : MonoBehaviour
         player.transform.position = playerEnterPoint.position;
 
         // Возобновление движения дороги
-        roadManager.StartRoad();
+        roadController.StartRoad();
     }
 
     private void OnTriggerEnter(Collider other)
