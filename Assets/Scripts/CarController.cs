@@ -1,12 +1,15 @@
 using UnityEngine;
-
+using UnityEngine.UI;
 public class CarController : MonoBehaviour
-{
+    {
     public float moveSpeed = 10.0f;
     public float laneSwitchSpeed = 5.0f;
     public GameObject player;
     public Transform playerExitPoint;
     public Transform playerEnterPoint;
+    public Slider healthSlider; 
+    public float maxHealth = 100;
+    public float health;
 
     private bool isPlayerInCar = true;
     private bool isPlayerNearCar = false;
@@ -14,6 +17,12 @@ public class CarController : MonoBehaviour
     // —сылка на RoadController дл€ управлени€ движением дороги
     public RoadController roadController;
 
+    private void Start()
+    {
+        health = maxHealth;
+        healthSlider.maxValue = maxHealth;
+        healthSlider.value = health;
+    }
     void Update()
     {
         if (isPlayerInCar)
@@ -67,5 +76,21 @@ public class CarController : MonoBehaviour
         {
             isPlayerNearCar = false;
         }
+    }
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
+        healthSlider.value = health;
+
+        Debug.Log("Health " + health);
+
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+    private void Die()
+    {
+        Debug.Log("PlayerDie");
     }
 }
