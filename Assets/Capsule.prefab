@@ -121,3 +121,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5.61
+  damageAmount: 10
+  attackCooldown: 1.5
