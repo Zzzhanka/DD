@@ -12,14 +12,15 @@ public class CarController : MonoBehaviour
     public float maxHealth = 100;
     public float health;
 
-    public RoadController roadController; // Ссылка на RoadController
+    public RoadController roadController; // Новый контроллер генерации дороги
+    public FirstRoadMove[] initialRoads;  // Ссылки на начальные сегменты дороги
 
-    public Transform steeringWheel;       // Руль
-    public float maxSteeringAngle = 45.0f; // Максимальный угол поворота руля
+    public Transform steeringWheel;
+    public float maxSteeringAngle = 45.0f;
 
     private bool isPlayerInCar = true;
     private bool isPlayerNearCar = false;
-    private bool isPlayerRunning = false; // Флаг, чтобы включить бег
+    private bool isPlayerRunning = false;
 
     private void Start()
     {
@@ -30,7 +31,7 @@ public class CarController : MonoBehaviour
 
     void Update()
     {
-        if (isPlayerRunning) return; // Если игрок бежит, машина не управляется
+        if (isPlayerRunning) return;
 
         if (isPlayerInCar)
         {
@@ -47,8 +48,6 @@ public class CarController : MonoBehaviour
     {
         float moveX = Input.GetAxis("Horizontal") * laneSwitchSpeed * Time.deltaTime;
         transform.Translate(new Vector3(moveX, 0, 0));
-
-        // Поворот руля в зависимости от ввода игрока
         RotateSteeringWheel(Input.GetAxis("Horizontal"));
     }
 
@@ -64,7 +63,7 @@ public class CarController : MonoBehaviour
         player.transform.position = playerExitPoint.position;
         player.SetActive(true);
 
-        roadController.StopRoad(); // Остановка дороги
+        StopAllMovement();
     }
 
     void EnterCar()
@@ -73,7 +72,7 @@ public class CarController : MonoBehaviour
         player.SetActive(false);
         player.transform.position = playerEnterPoint.position;
 
-        roadController.StartRoad(); // Запуск дороги
+        StartAllMovement();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -92,7 +91,6 @@ public class CarController : MonoBehaviour
         }
     }
 
-    // Метод получения урона
     public void TakeDamage(int damage)
     {
         health -= damage;
@@ -107,19 +105,34 @@ public class CarController : MonoBehaviour
     private void Die()
     {
         Debug.Log("PlayerDie");
-        isPlayerRunning = true; // Включаем режим бега
+        isPlayerRunning = true;
 
-        // Активируем скрипт бега игрока
         player.GetComponent<FirstPersonMovement>().enabled = true;
         player.SetActive(true);
 
-        // Останавливаем машину и дорогу
-        StopCarAndRoad();
+        StopAllMovement();
     }
 
-    void StopCarAndRoad()
+    void StopAllMovement()
     {
         isPlayerInCar = false;
-        roadController.StopRoad();
+        roadController.StopRoad(); // Остановка основной дороги
+
+        // Остановка движения для всех начальных сегментов
+        foreach (FirstRoadMove initialRoad in initialRoads)
+        {
+            initialRoad.StopMovement();
+        }
+    }
+
+    void StartAllMovement()
+    {
+        roadController.StartRoad(); // Запуск основной дороги
+
+        // Запуск движения для всех начальных сегментов
+        foreach (FirstRoadMove initialRoad in initialRoads)
+        {
+            initialRoad.StartMovement();
+        }
     }
 }
