@@ -17,7 +17,7 @@ RenderSettings:
   m_Fog: 1
   m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.05
+  m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -27,7 +27,7 @@ RenderSettings:
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 0}
   m_SkyboxMaterial: {fileID: 2100000, guid: 2441c79940171dc43b33badf9fe97828, type: 2}
-  m_HaloStrength: 0.462
+  m_HaloStrength: 0.19
   m_FlareStrength: 1
   m_FlareFadeSpeed: -1.21
   m_HaloTexture: {fileID: 0}
@@ -1165,6 +1165,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9157369121234299698, guid: f267a61217a83cb4db8c0fc93a161b54, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1752,7 +1756,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5038663600043019349, guid: 706dfbe1f6eb1384bac50564e3be0cfd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4220
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5038663600043019349, guid: 706dfbe1f6eb1384bac50564e3be0cfd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1760,7 +1764,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5038663600043019349, guid: 706dfbe1f6eb1384bac50564e3be0cfd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1467
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5038663600043019349, guid: 706dfbe1f6eb1384bac50564e3be0cfd, type: 3}
       propertyPath: m_LocalRotation.w
